@@ -20,10 +20,10 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 resolvers ++= Seq(
   DefaultMavenRepository,
   Resolver.sonatypeRepo("public"),
+  Resolver.sonatypeRepo("snapshots")
   Resolver.typesafeRepo("releases"),
   Resolver.sbtPluginRepo("releases"),
   Resolver.jcenterRepo,
-  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
 )
 
 /** Source Dependencies */
