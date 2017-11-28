@@ -20,7 +20,7 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 resolvers ++= Seq(
   DefaultMavenRepository,
   Resolver.sonatypeRepo("public"),
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("snapshots"),
   Resolver.typesafeRepo("releases"),
   Resolver.sbtPluginRepo("releases"),
   Resolver.jcenterRepo,
