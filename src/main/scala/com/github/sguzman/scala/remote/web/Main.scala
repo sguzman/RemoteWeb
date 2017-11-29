@@ -8,9 +8,15 @@ import scalaj.http.{Http, HttpResponse}
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val port = System.getenv("PORT")
+    val portEnv = System.getenv("PORT")
+    val port = try {
+      if (portEnv.isEmpty) 8888
+      else portEnv.toInt
+    } catch {
+      case _: Throwable => 8888
+    }
 
-    Server.listen(8888)(handle)
+    Server.listen(port)(handle)
   }
 
   def handle(e: Request) = {
