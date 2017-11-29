@@ -30,7 +30,8 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "org.scalaj" % "scalaj-http_2.12" % "2.3.0",
   "org.feijoas" % "mango_2.12" % "0.14",
-  "org.apache.commons" % "commons-lang3" % "3.7"
+  "org.apache.commons" % "commons-lang3" % "3.7",
+  "com.criteo.lolhttp" % "lolhttp_2.12" % "0.8.1"
 )
 
 /** Make sure to fork on run */
