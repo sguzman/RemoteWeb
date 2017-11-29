@@ -33,10 +33,6 @@ object Main {
 
     val scheme = e.headers.getOrElse(HttpString("Remote-Scheme"), "https")
     val method = e.method
-    val bodyOpt = if (e.content.toString.isEmpty)
-      None
-    else
-      Some(e.content.toString)
 
     val host = e.headers(HttpString("Remote-Web-Host"))
     val path = e.url
@@ -47,10 +43,7 @@ object Main {
       .headers(remoteWebHeaders)
       .method(method.toString)
 
-    val requestReady = if (bodyOpt.isDefined)
-      request.postData(bodyOpt.get)
-    else
-      request
+    val requestReady = request
 
     val response = requestReady.asString
     response
