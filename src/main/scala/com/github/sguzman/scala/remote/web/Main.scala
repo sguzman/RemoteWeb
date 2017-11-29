@@ -22,7 +22,9 @@ object Main {
           (HttpString("Access-Control-Allow-Headers"), HttpString("Origin, X-Requested-With, Content-Type, Accept"))
         )
     } catch {
-      case e: Throwable => NotFound(e.getMessage)
+      case e: Throwable =>
+        Console.err.println(e.getMessage)
+        NotFound(e.getMessage)
     }
   }
 
@@ -38,6 +40,7 @@ object Main {
     val path = e.url
 
     val uri = s"$scheme://$host$path"
+    println(s"Received a request for $uri")
 
     val request = Http(uri)
       .headers(remoteWebHeaders)
