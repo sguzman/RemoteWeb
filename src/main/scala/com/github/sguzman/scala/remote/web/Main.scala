@@ -39,6 +39,7 @@ object Main {
     val remoteWebHeaders = e.headers
       .filter(_._1.str.startsWith("Remote-Web-"))
       .map(t => (StringUtils.substringAfter(t._1.str, "Remote-Web-"), t._2.str))
+    remoteWebHeaders foreach println
 
     val scheme = e.headers.getOrElse(HttpString("Remote-Scheme"), "https")
     val method = e.method
