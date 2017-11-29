@@ -4,16 +4,17 @@ import lol.http._
 import org.apache.commons.lang3.StringUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 import scalaj.http.{Http, HttpResponse}
 
 object Main {
   def main(args: Array[String]): Unit = {
     val portEnv = System.getenv("PORT")
-    val port = try {
-      if (portEnv.isEmpty) 8888
-      else portEnv.toInt
-    } catch {
-      case _: Throwable => 8888
+    val port = util.Try(portEnv.toInt) match {
+      case Success(v) => v
+      case Failure(e) =>
+        Console.err.println(s"Could not find PORT env var: ${e.getMessage}")
+        8888
     }
 
     Server.listen(port)(handle)
