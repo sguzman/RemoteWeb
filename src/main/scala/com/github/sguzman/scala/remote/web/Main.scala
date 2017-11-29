@@ -1,7 +1,10 @@
 package com.github.sguzman.scala.remote.web
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import lol.http._
+import org.apache.commons.lang3.StringUtils
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scalaj.http.{Http, HttpResponse}
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -11,6 +14,45 @@ object Main {
   }
 
   def handle(e: Request) = {
-    Ok("good")
+    try {
+      val response = request(e)
+      Ok(response.body)
+        .addHeaders(
+          (HttpString("Access-Control-Allow-Origin"), HttpString("*")),
+          (HttpString("Access-Control-Allow-Headers"), HttpString("Origin, X-Requested-With, Content-Type, Accept"))
+        )
+    } catch {
+      case e: Throwable => NotFound(e.getMessage)
+    }
+  }
+
+  def request(e: Request): HttpResponse[String] = {
+    val remoteWebHeaders = e.headers
+      .filter(_._1.str.startsWith("Remote-Web-"))
+      .map(t => (StringUtils.substringAfter(t._1.str, "Remote-Web-"), t._2.str))
+
+    val scheme = e.headers.getOrElse(HttpString("Remote-Scheme"), "https")
+    val method = e.method
+    val bodyOpt = if (e.content.toString.isEmpty)
+      None
+    else
+      Some(e.content.toString)
+
+    val host = e.headers(HttpString("Remote-Web-Host"))
+    val path = e.url
+
+    val uri = s"$scheme://$host$path"
+
+    val request = Http(uri)
+      .headers(remoteWebHeaders)
+      .method(method.toString)
+
+    val requestReady = if (bodyOpt.isDefined)
+      request.postData(bodyOpt.get)
+    else
+      request
+
+    val response = requestReady.asString
+    response
   }
 }
