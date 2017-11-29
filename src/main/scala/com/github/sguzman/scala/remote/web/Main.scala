@@ -7,9 +7,7 @@ object Main {
   def main(args: Array[String]): Unit = {
     val port = System.getenv("PORT")
 
-    Server.listen(8888) {
-      case e => handle(e)
-    }
+    Server.listen(8888)(handle)
   }
 
   def handle(e: Request) = {
